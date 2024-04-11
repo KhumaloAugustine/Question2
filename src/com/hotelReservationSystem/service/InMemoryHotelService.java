@@ -6,18 +6,22 @@ import com.hotelReservationSystem.model.Room;
 import com.hotelReservationSystem.model.RoomType;
 
 import java.util.ArrayList;
+// Import HashMap for efficient hotel storage by name
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryHotelService implements HotelService {
 
+    // Stores hotels using their names as keys for easy retrieval
     private final Map<String, Hotel> hotels;
 
     public InMemoryHotelService() {
+        // Initialize the hotel map with some sample hotels during startup
         hotels = createSampleHotels();
     }
 
+    // Create some sample hotels with various room types for testing purposes
     private Map<String, Hotel> createSampleHotels() {
         Map<String, Hotel> hotelsMap = new HashMap<>();
 
@@ -39,7 +43,9 @@ public class InMemoryHotelService implements HotelService {
     @Override
     public List<Hotel> findAvailableHotels(Reservation reservation) {
         List<Hotel> availableHotels = new ArrayList<>();
+        // Search through all hotels
         for (Hotel hotel : hotels.values()) {
+            // Check if the hotel has rooms available that match the reservation requirements
             if (!hotel.findAvailableRooms(reservation).isEmpty()) {
                 availableHotels.add(hotel);
             }
@@ -49,10 +55,11 @@ public class InMemoryHotelService implements HotelService {
 
     @Override
     public boolean bookRoom(Reservation reservation, Hotel hotel, Room room) {
+        // Attempt to book the room in the chosen hotel using the hotel's booking method
         if (hotel.bookRoom(reservation, room)) {
             return true; // Booking successful
         } else {
-            return false; // Room already booked or other error
+            return false; // Room already booked or other error during booking
         }
     }
 }
