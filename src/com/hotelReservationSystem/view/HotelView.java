@@ -103,4 +103,14 @@ public class HotelView {
     public void displayErrorMessage(String message) {
         System.out.println("\nError: " + message);
     }
+
+    // Display the main menu options to the user
+    public void displayMainMenu() {
+        System.out.println("\nMain Menu:");
+        System.out.println("1. Make a Reservation");
+        System.out.println("2. View Reservations (Not yet implemented)"); // Placeholder
+        System.out.println("3. Cancel Reservation (Not yet implemented)"); // Placeholder
+        System.out.println("4. Exit");
+    }
+
 }

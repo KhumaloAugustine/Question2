@@ -60,6 +60,6 @@ public class Room {
     // Override the default toString method to provide a clear description of the room
     @Override
     public String toString() {
-        return "Room " + roomNumber + " (" + type + "): $" + pricePerNight + "/night, capacity " + capacity;
+        return "Room " + roomNumber + " (" + type + "): R" + pricePerNight + "/night, capacity " + capacity;
     }
 }
