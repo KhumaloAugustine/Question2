@@ -62,4 +62,31 @@ public class InMemoryHotelService implements HotelService {
             return false; // Room already booked or other error during booking
         }
     }
+
+    @Override
+    public List<Reservation> getReservationsByGuestName(String guestName) {
+        List<Reservation> guestReservations = new ArrayList<>();
+        for (Hotel hotel : hotels.values()) {
+            for (Room room : hotel.getRooms()) {
+                if (room.getReservation() != null && room.getReservation().getGuestName().equals(guestName)) {
+                    guestReservations.add(room.getReservation());
+                }
+            }
+        }
+        return guestReservations;
+    }
+
+    @Override
+    public boolean cancelReservation(Reservation reservation) {
+        // Find the room associated with the reservation and mark it as available
+        for (Hotel hotel : hotels.values()) {
+            for (Room room : hotel.getRooms()) {
+                if (room.getReservation() == reservation) {
+                    room.setReservation(null); // Remove reservation from the room
+                    return true; // Reservation canceled successfully
+                }
+            }
+        }
+        return false; // Reservation not found or already canceled
+    }
 }

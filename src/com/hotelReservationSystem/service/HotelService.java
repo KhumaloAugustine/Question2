@@ -28,4 +28,9 @@ public interface HotelService {
      * @return True if the room was booked successfully, False otherwise (e.g., room unavailable)
      */
     boolean bookRoom(Reservation reservation, Hotel hotel, Room room);
+    // New method to retrieve reservations by guest name
+    List<Reservation> getReservationsByGuestName(String guestName);
+
+    // New method to cancel a reservation
+    boolean cancelReservation(Reservation reservation);
 }

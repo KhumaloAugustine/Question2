@@ -18,6 +18,12 @@ public class HotelView {
         this.scanner = new Scanner(System.in);
     }
 
+    // Add this method to the HotelView class
+    public void displayCancellationConfirmation() {
+        System.out.println("Reservation successfully canceled.");
+    }
+
+
     // Display a welcome message to the user
     public void displayWelcomeMessage() {
         System.out.println("\nWelcome to the Hotel Reservation System!");
@@ -113,4 +119,13 @@ public class HotelView {
         System.out.println("4. Exit");
     }
 
+    // Display reservation details to the user
+    public void displayReservation(Reservation reservation) {
+        System.out.println("\nReservation Details:");
+        System.out.println("Guest Name: " + reservation.getGuestName());
+        System.out.println("Hotel: " + reservation.getHotel().getName());
+        System.out.println("Room: " + reservation.getRoom());
+        System.out.println("Arrival Date: " + reservation.getArrivalDate());
+        System.out.println("Departure Date: " + reservation.getDepartureDate());
+    }
 }

@@ -107,6 +107,9 @@ public class HotelController {
 
             Hotel chosenHotel = availableHotels.get(chosenHotelIndex);
 
+            // Set the chosen hotel to the reservation
+            reservation.setHotel(chosenHotel);
+
             List<Room> availableRooms = chosenHotel.findAvailableRooms(reservation);
             if (availableRooms.isEmpty()) {
                 view.displayErrorMessage("No rooms available at the chosen hotel for your selected dates.");
@@ -126,16 +129,61 @@ public class HotelController {
     }
 
     private void viewReservations() {
-        // Implement logic to retrieve existing reservations (based on user ID or name)
-        // and display details using HotelView methods (e.g., displayReservation)
-        System.out.println("Feature not yet implemented (View Reservations).");
+        // Get the guest's name for whom reservations should be viewed
+        String guestName = getStringInput("Enter your name: ");
+
+        // Implement logic to retrieve existing reservations for the given guest name
+        // This could involve querying a database or other data storage mechanism
+        // For now, let's assume we have a method in HotelService to retrieve reservations by guest name
+        List<Reservation> reservations = hotelService.getReservationsByGuestName(guestName);
+
+        if (reservations.isEmpty()) {
+            view.displayErrorMessage("No reservations found for " + guestName);
+        } else {
+            // Display each reservation to the user
+            for (Reservation reservation : reservations) {
+                view.displayReservation(reservation);
+            }
+        }
     }
 
+
     private void cancelReservation() {
-        // Implement logic to retrieve existing reservations (based on user ID or name)
-        // and allow user to select a reservation to cancel
-        // Call HotelService method to cancel the selected reservation
-        // Display confirmation message or error message
-        System.out.println("Feature not yet implemented (Cancel Reservation).");
+        // Get the guest's name for whom reservations should be canceled
+        String guestName = getStringInput("Enter your name: ");
+
+        // Implement logic to retrieve existing reservations for the given guest name
+        // This could involve querying a database or other data storage mechanism
+        // For now, let's assume we have a method in HotelService to retrieve reservations by guest name
+        List<Reservation> reservations = hotelService.getReservationsByGuestName(guestName);
+
+        if (reservations.isEmpty()) {
+            view.displayErrorMessage("No reservations found for " + guestName);
+        } else {
+            // Display each reservation to the user
+            for (int i = 0; i < reservations.size(); i++) {
+                Reservation reservation = reservations.get(i);
+                view.displayReservation(reservation);
+                int choice = getIntegerInput("Enter the number of the reservation you want to cancel (1-" + reservations.size() + "), or 0 to cancel: ");
+                if (choice == 0) {
+                    return; // User canceled operation
+                } else if (choice > 0 && choice <= reservations.size()) {
+                    // Get the selected reservation
+                    Reservation selectedReservation = reservations.get(choice - 1);
+                    // Call HotelService method to cancel the reservation
+                    boolean canceled = hotelService.cancelReservation(selectedReservation);
+                    if (canceled) {
+// Call the method to display cancellation confirmation in your controller
+                        view.displayCancellationConfirmation();
+                    } else {
+                        view.displayErrorMessage("Failed to cancel reservation.");
+                    }
+                    return; // Operation completed
+                } else {
+                    view.displayErrorMessage("Invalid choice. Please try again.");
+                }
+            }
+        }
     }
+
 }

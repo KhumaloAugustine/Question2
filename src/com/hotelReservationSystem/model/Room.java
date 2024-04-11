@@ -17,6 +17,9 @@ public class Room {
     // Indicates if the room is currently available for booking
     private boolean available;
 
+    // Reference to the reservation associated with this room
+    private Reservation reservation;
+
     // Constructor to create a new Room with details
     public Room(int roomNumber, RoomType type, double pricePerNight, int capacity) {
         this.roomNumber = roomNumber;
@@ -55,6 +58,16 @@ public class Room {
     // Update the availability status of the room
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    // Get the reservation associated with this room
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    // Set the reservation associated with this room
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     // Override the default toString method to provide a clear description of the room
