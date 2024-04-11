@@ -54,8 +54,8 @@ public class HotelView {
     public int chooseHotel(int numHotels) {
         System.out.print("Enter the number of the hotel you want to choose (1-" + numHotels + "): ");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
-        return choice - 1; // Adjust for zero-based indexing
+        scanner.nextLine();
+        return choice - 1;
     }
 
     public void displayAvailableRooms(List<Room> rooms) {
@@ -72,8 +72,8 @@ public class HotelView {
     public int chooseRoom(int numRooms) {
         System.out.print("Enter the number of the room you want to book (1-" + numRooms + "): ");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
-        return choice - 1; // Adjust for zero-based indexing
+        scanner.nextLine();
+        return choice - 1;
     }
 
     public void displayConfirmation(Reservation reservation, Room room) {

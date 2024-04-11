@@ -6,14 +6,14 @@ public class Room {
     private final RoomType type;
     private final double pricePerNight;
     private final int capacity;
-    private boolean available; // Flag indicating if the room is available
+    private boolean available;
 
     public Room(int roomNumber, RoomType type, double pricePerNight, int capacity) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.pricePerNight = pricePerNight;
         this.capacity = capacity;
-        this.available = true; // Initially available
+        this.available = true;
     }
 
     public int getRoomNumber() {

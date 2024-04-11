@@ -1,12 +1,10 @@
 package com.hotelReservationSystem.service;
 
-
 import com.hotelReservationSystem.model.Hotel;
 import com.hotelReservationSystem.model.Reservation;
 import com.hotelReservationSystem.model.Room;
 import com.hotelReservationSystem.model.RoomType;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.Map;
 
 public class InMemoryHotelService implements HotelService {
 
-    private final Map<String, Hotel> hotels; // Map to store hotels by name (key)
+    private final Map<String, Hotel> hotels;
 
     public InMemoryHotelService() {
         hotels = createSampleHotels();
@@ -23,7 +21,6 @@ public class InMemoryHotelService implements HotelService {
     private Map<String, Hotel> createSampleHotels() {
         Map<String, Hotel> hotelsMap = new HashMap<>();
 
-        // Create sample hotels with rooms
         Hotel hotel1 = new Hotel("Grand Stay");
         hotel1.addRoom(new Room(101, RoomType.SINGLE, 50.0, 1));
         hotel1.addRoom(new Room(102, RoomType.DOUBLE, 75.0, 2));
@@ -43,7 +40,7 @@ public class InMemoryHotelService implements HotelService {
     public List<Hotel> findAvailableHotels(Reservation reservation) {
         List<Hotel> availableHotels = new ArrayList<>();
         for (Hotel hotel : hotels.values()) {
-            if (hotel.findAvailableRooms(reservation).size() > 0) {
+            if (!hotel.findAvailableRooms(reservation).isEmpty()) {
                 availableHotels.add(hotel);
             }
         }
@@ -59,4 +56,3 @@ public class InMemoryHotelService implements HotelService {
         }
     }
 }
-

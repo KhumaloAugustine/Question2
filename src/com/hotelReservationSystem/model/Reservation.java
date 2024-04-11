@@ -9,7 +9,7 @@ public class Reservation {
     private final LocalDate arrivalDate;
     private final LocalDate departureDate;
     private Hotel hotel;
-    private Room room; // Optional, assigned room after booking
+    private Room room;
 
     public Reservation(String guestName, int numGuests, LocalDate arrivalDate, LocalDate departureDate) {
         this.guestName = guestName;

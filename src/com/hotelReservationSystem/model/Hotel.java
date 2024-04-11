@@ -37,7 +37,7 @@ public class Hotel {
 
     public boolean bookRoom(Reservation reservation, Room room) {
         if (room.isAvailable()) {
-            room.setAvailable(false); // Mark room as booked
+            room.setAvailable(false);
             return true;
         } else {
             return false;
