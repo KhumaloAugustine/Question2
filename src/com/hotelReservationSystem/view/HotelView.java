@@ -40,7 +40,7 @@ public class HotelView {
         for (int i = 0; i < rooms.size(); i++) {
             Room room = rooms.get(i);
             System.out.println((i + 1) + ". Room " + room.getNumber() + " - " + room.getType());
-            System.out.println("   Price per Night: $" + room.getPricePerNight());
+            System.out.println("   Price per Night: R" + room.getPricePerNight());
             System.out.println("   Capacity: " + room.getCapacity() + " guests");
         }
     }
@@ -52,7 +52,7 @@ public class HotelView {
         System.out.println("Room: " + room.getNumber() + " - " + room.getType());
         System.out.println("Arrival Date: " + reservation.getArrivalDate());
         System.out.println("Departure Date: " + reservation.getDepartureDate());
-        System.out.println("Total Price: $" + room.getPricePerNight() * reservation.getNumNights());
+        System.out.println("Total Price: R" + room.getPricePerNight() * reservation.getNumNights());
     }
 
     public void displayReservations(List<Reservation> reservations) {
@@ -64,7 +64,7 @@ public class HotelView {
             System.out.println("   Room: " + reservation.getRoomNumber());
             System.out.println("   Arrival Date: " + reservation.getArrivalDate());
             System.out.println("   Departure Date: " + reservation.getDepartureDate());
-            System.out.println("   Total Price: $" + reservation.getTotalPrice());
+            System.out.println("   Total Price: R" + reservation.getTotalPrice());
         }
     }
 
