@@ -55,12 +55,12 @@ public class HotelController {
         do {
             System.out.print(prompt);
             while (!scanner.hasNextInt()) {
-                scanner.next(); // Clear invalid input
+                scanner.next();
                 System.out.println("Please enter a valid number.");
             }
             choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
-        } while (choice < 1 || choice > 4); // Validate menu choice
+            scanner.nextLine();
+        } while (choice < 1 || choice > 4);
         return choice;
     }
 
@@ -87,9 +87,8 @@ public class HotelController {
     private void makeReservation() {
         String guestName = getStringInput("Enter your name: ");
         int numGuests = getIntegerInput("Enter the number of guests: ");
-
-        LocalDate arrivalDate = getValidDateInput("Enter arrival date: ");
-        LocalDate departureDate = getValidDateInput("Enter departure date: ");
+        LocalDate arrivalDate = getValidDateInput("Enter arrival date");
+        LocalDate departureDate = getValidDateInput("Enter departure date");
 
         if (departureDate.isBefore(arrivalDate)) {
             System.out.println("Departure date cannot be before arrival date. Please try again.");
@@ -103,87 +102,64 @@ public class HotelController {
             view.displayErrorMessage("No hotels available for your selected dates.");
         } else {
             view.displayAvailableHotels(availableHotels);
-            int chosenHotelIndex = getIntegerInput("Enter the number of the hotel you want to choose (1-" + availableHotels.size() + "): ") - 1;
-
-            Hotel chosenHotel = availableHotels.get(chosenHotelIndex);
-
-            // Set the chosen hotel to the reservation
-            reservation.setHotel(chosenHotel);
-
-            List<Room> availableRooms = chosenHotel.findAvailableRooms(reservation);
-            if (availableRooms.isEmpty()) {
-                view.displayErrorMessage("No rooms available at the chosen hotel for your selected dates.");
+            int chosenHotelIndex = getIntegerInput("Choose a hotel (1-" + availableHotels.size() + "): ");
+            if (chosenHotelIndex < 1 || chosenHotelIndex > availableHotels.size()) {
+                view.displayErrorMessage("Invalid choice. Please try again.");
             } else {
-                view.displayAvailableRooms(availableRooms);
-                int chosenRoomIndex = getIntegerInput("Enter the number of the room you want to book (1-" + availableRooms.size() + "): ") - 1;
-
-                Room chosenRoom = availableRooms.get(chosenRoomIndex);
-
-                if (hotelService.bookRoom(reservation, chosenHotel, chosenRoom)) {
-                    view.displayConfirmation(reservation, chosenRoom);
+                Hotel chosenHotel = availableHotels.get(chosenHotelIndex - 1);
+                List<Room> availableRooms = chosenHotel.findAvailableRooms(reservation);
+                if (availableRooms.isEmpty()) {
+                    view.displayErrorMessage("No available rooms in the chosen hotel.");
                 } else {
-                    view.displayErrorMessage("An error occurred while booking the room.");
+                    view.displayAvailableRooms(availableRooms);
+                    int chosenRoomIndex = getIntegerInput("Choose a room (1-" + availableRooms.size() + "): ");
+                    if (chosenRoomIndex < 1 || chosenRoomIndex > availableRooms.size()) {
+                        view.displayErrorMessage("Invalid choice. Please try again.");
+                    } else {
+                        Room chosenRoom = availableRooms.get(chosenRoomIndex - 1);
+                        boolean success = hotelService.bookRoom(reservation, chosenHotel, chosenRoom);
+                        if (success) {
+                            view.displayReservationConfirmation(reservation, chosenHotel, chosenRoom);
+                        } else {
+                            view.displayErrorMessage("Failed to make reservation.");
+                        }
+                    }
                 }
             }
         }
     }
 
     private void viewReservations() {
-        // Get the guest's name for whom reservations should be viewed
         String guestName = getStringInput("Enter your name: ");
-
-        // Implement logic to retrieve existing reservations for the given guest name
-        // This could involve querying a database or other data storage mechanism
-        // For now, let's assume we have a method in HotelService to retrieve reservations by guest name
         List<Reservation> reservations = hotelService.getReservationsByGuestName(guestName);
-
         if (reservations.isEmpty()) {
             view.displayErrorMessage("No reservations found for " + guestName);
         } else {
-            // Display each reservation to the user
-            for (Reservation reservation : reservations) {
-                view.displayReservation(reservation);
-            }
+            view.displayReservations(reservations);
         }
     }
-
 
     private void cancelReservation() {
-        // Get the guest's name for whom reservations should be canceled
         String guestName = getStringInput("Enter your name: ");
-
-        // Implement logic to retrieve existing reservations for the given guest name
-        // This could involve querying a database or other data storage mechanism
-        // For now, let's assume we have a method in HotelService to retrieve reservations by guest name
         List<Reservation> reservations = hotelService.getReservationsByGuestName(guestName);
-
         if (reservations.isEmpty()) {
             view.displayErrorMessage("No reservations found for " + guestName);
         } else {
-            // Display each reservation to the user
-            for (int i = 0; i < reservations.size(); i++) {
-                Reservation reservation = reservations.get(i);
-                view.displayReservation(reservation);
-                int choice = getIntegerInput("Enter the number of the reservation you want to cancel (1-" + reservations.size() + "), or 0 to cancel: ");
-                if (choice == 0) {
-                    return; // User canceled operation
-                } else if (choice > 0 && choice <= reservations.size()) {
-                    // Get the selected reservation
-                    Reservation selectedReservation = reservations.get(choice - 1);
-                    // Call HotelService method to cancel the reservation
-                    boolean canceled = hotelService.cancelReservation(selectedReservation);
-                    if (canceled) {
-// Call the method to display cancellation confirmation in your controller
-                        view.displayCancellationConfirmation();
-                    } else {
-                        view.displayErrorMessage("Failed to cancel reservation.");
-                    }
-                    return; // Operation completed
+            view.displayReservations(reservations);
+            int choice = getIntegerInput("Enter the number of the reservation you want to cancel (1-" + reservations.size() + "), or 0 to cancel: ");
+            if (choice == 0) {
+                return;
+            } else if (choice > 0 && choice <= reservations.size()) {
+                Reservation selectedReservation = reservations.get(choice - 1);
+                boolean canceled = hotelService.cancelReservation(selectedReservation);
+                if (canceled) {
+                    view.displayCancellationConfirmation();
                 } else {
-                    view.displayErrorMessage("Invalid choice. Please try again.");
+                    view.displayErrorMessage("Failed to cancel reservation.");
                 }
+            } else {
+                view.displayErrorMessage("Invalid choice. Please try again.");
             }
         }
     }
-
 }

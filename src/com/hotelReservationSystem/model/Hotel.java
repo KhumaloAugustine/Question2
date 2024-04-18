@@ -4,62 +4,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hotel {
+    private String name;
+    private String location;
+    private double rating;
+    private String priceRange;
+    private List<Room> rooms;
 
-    // This stores the hotel's name
-    private final String name;
-
-    // This list stores all the rooms in the hotel
-    private final List<Room> rooms;
-
-    // Constructor to create a new Hotel with a name
     public Hotel(String name) {
         this.name = name;
-        // Initialize the rooms list as an empty ArrayList
         this.rooms = new ArrayList<>();
     }
 
-    // Get the hotel's name
     public String getName() {
         return name;
     }
 
-    // Get the list of all rooms in the hotel
-    public List<Room> getRooms() {
-        // Return a copy of the list to avoid modifying the original list
-        return new ArrayList<>(rooms);
+    public String getLocation() {
+        return location;
     }
 
-    // Add a new room to the hotel
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getPriceRange() {
+        return priceRange;
+    }
+
+    public void setPriceRange(String priceRange) {
+        this.priceRange = priceRange;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
     public void addRoom(Room room) {
         rooms.add(room);
     }
 
-    // Find all rooms that are available based on a reservation request
-    // (considering room capacity and availability)
-    public List<Room> findAvailableRooms(Reservation request) {
+    public List<Room> findAvailableRooms(Reservation reservation) {
         List<Room> availableRooms = new ArrayList<>();
         for (Room room : rooms) {
-            // Check if the room is available and has enough capacity for guests
-            if (room.isAvailable() && room.getCapacity() >= request.getNumGuests()) {
+            if (room.isAvailable() && room.getCapacity() >= reservation.getNumGuests()) {
                 availableRooms.add(room);
             }
         }
         return availableRooms;
     }
 
-    // Try to book a specific room for a reservation
-    // This only succeeds if the room is currently available
     public boolean bookRoom(Reservation reservation, Room room) {
-        if (room.isAvailable()) {
-            room.setAvailable(false); // Mark the room as booked
+        if (room.isAvailable() && room.getCapacity() >= reservation.getNumGuests()) {
+            room.setReservation(reservation);
+            room.setAvailable(false);
+            reservation.setHotelName(name);
+            reservation.setRoomNumber(room.getNumber());
             return true;
-        } else {
-            return false; // Booking failed because room is unavailable
         }
-    }
-
-    @Override
-    public String toString() {
-        return name + " Hotel";
+        return false;
     }
 }

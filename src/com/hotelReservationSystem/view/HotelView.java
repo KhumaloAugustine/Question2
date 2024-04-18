@@ -4,128 +4,71 @@ import com.hotelReservationSystem.model.Hotel;
 import com.hotelReservationSystem.model.Reservation;
 import com.hotelReservationSystem.model.Room;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
 public class HotelView {
 
-    // Object to read user input from the console
-    private final Scanner scanner;
-
-    public HotelView() {
-        // Create a Scanner object to get user input
-        this.scanner = new Scanner(System.in);
-    }
-
-    // Add this method to the HotelView class
-    public void displayCancellationConfirmation() {
-        System.out.println("Reservation successfully canceled.");
-    }
-
-
-    // Display a welcome message to the user
     public void displayWelcomeMessage() {
-        System.out.println("\nWelcome to the Hotel Reservation System!");
+        System.out.println("Welcome to the Hotel Reservation System!");
     }
 
-    // Get the guest's name from the user
-    public String getGuestName() {
-        System.out.print("Enter your name: ");
-        return scanner.nextLine().trim(); // Remove leading/trailing spaces
-    }
-
-    // Get the number of guests from the user
-    public int getNumGuests() {
-        System.out.print("Enter the number of guests: ");
-        return scanner.nextInt();
-    }
-
-    // Get the arrival date from the user in YYYY-MM-DD format
-    public LocalDate getArrivalDate() {
-        System.out.print("Enter arrival date (YYYY-MM-DD): ");
-        String dateStr = scanner.nextLine().trim();
-        return LocalDate.parse(dateStr); // Convert the string to a date object
-    }
-
-    // Get the departure date from the user in YYYY-MM-DD format
-    public LocalDate getDepartureDate() {
-        System.out.print("Enter departure date (YYYY-MM-DD): ");
-        String dateStr = scanner.nextLine().trim();
-        return LocalDate.parse(dateStr); // Convert the string to a date object
-    }
-
-    // Display a list of available hotels to the user
-    public void displayAvailableHotels(List<Hotel> hotels) {
-        System.out.println("\nAvailable Hotels:");
-        int counter = 1; // Keep track of hotel number for display
-        for (Hotel hotel : hotels) {
-            System.out.println(counter + ". " + hotel.getName());
-            counter++;
-        }
-    }
-
-    // Get the user's choice of hotel from a numbered list
-    public int chooseHotel(int numHotels) {
-        System.out.print("Enter the number of the hotel you want to choose (1-" + numHotels + "): ");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character after integer input
-        // Adjust user choice for zero-based indexing (common in programming)
-        return choice - 1;
-    }
-
-    // Display a list of available rooms to the user
-    public void displayAvailableRooms(List<Room> rooms) {
-        System.out.println("\nAvailable Rooms:");
-        if (rooms.isEmpty()) {
-            System.out.println("  No rooms available for your selected dates.");
-        } else {
-            for (Room room : rooms) {
-                System.out.println("  " + room); // Use room's toString() method for description
-            }
-        }
-    }
-
-    // Get the user's choice of room from a numbered list
-    public int chooseRoom(int numRooms) {
-        System.out.print("Enter the number of the room you want to book (1-" + numRooms + "): ");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character after integer input
-        // Adjust user choice for zero-based indexing (common in programming)
-        return choice - 1;
-    }
-
-    // Display a confirmation message with reservation details
-    public void displayConfirmation(Reservation reservation, Room room) {
-        System.out.println("\nReservation confirmed!");
-        System.out.println("Guest Name: " + reservation.getGuestName());
-        System.out.println("Hotel: " + reservation.getHotel().getName());
-        System.out.println("Room: " + room);
-        System.out.println("Arrival Date: " + reservation.getArrivalDate());
-        System.out.println("Departure Date: " + reservation.getDepartureDate());
-    }
-
-    // Display an error message to the user
-    public void displayErrorMessage(String message) {
-        System.out.println("\nError: " + message);
-    }
-
-    // Display the main menu options to the user
     public void displayMainMenu() {
         System.out.println("\nMain Menu:");
         System.out.println("1. Make a Reservation");
-        System.out.println("2. View Reservations (Not yet implemented)"); // Placeholder
-        System.out.println("3. Cancel Reservation (Not yet implemented)"); // Placeholder
+        System.out.println("2. View Reservations");
+        System.out.println("3. Cancel Reservation");
         System.out.println("4. Exit");
     }
 
-    // Display reservation details to the user
-    public void displayReservation(Reservation reservation) {
-        System.out.println("\nReservation Details:");
+    public void displayErrorMessage(String message) {
+        System.out.println("Error: " + message);
+    }
+
+    public void displayAvailableHotels(List<Hotel> hotels) {
+        System.out.println("\nAvailable Hotels:");
+        for (int i = 0; i < hotels.size(); i++) {
+            Hotel hotel = hotels.get(i);
+            System.out.println((i + 1) + ". " + hotel.getName());
+            System.out.println("   Location: " + hotel.getLocation());
+            System.out.println("   Rating: " + hotel.getRating());
+            System.out.println("   Price Range: " + hotel.getPriceRange());
+        }
+    }
+
+    public void displayAvailableRooms(List<Room> rooms) {
+        System.out.println("\nAvailable Rooms:");
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            System.out.println((i + 1) + ". Room " + room.getNumber() + " - " + room.getType());
+            System.out.println("   Price per Night: $" + room.getPricePerNight());
+            System.out.println("   Capacity: " + room.getCapacity() + " guests");
+        }
+    }
+
+    public void displayReservationConfirmation(Reservation reservation, Hotel hotel, Room room) {
+        System.out.println("\nReservation Confirmation:");
         System.out.println("Guest Name: " + reservation.getGuestName());
-        System.out.println("Hotel: " + reservation.getHotel().getName());
-        System.out.println("Room: " + reservation.getRoom());
+        System.out.println("Hotel: " + hotel.getName());
+        System.out.println("Room: " + room.getNumber() + " - " + room.getType());
         System.out.println("Arrival Date: " + reservation.getArrivalDate());
         System.out.println("Departure Date: " + reservation.getDepartureDate());
+        System.out.println("Total Price: $" + room.getPricePerNight() * reservation.getNumNights());
+    }
+
+    public void displayReservations(List<Reservation> reservations) {
+        System.out.println("\nYour Reservations:");
+        for (int i = 0; i < reservations.size(); i++) {
+            Reservation reservation = reservations.get(i);
+            System.out.println((i + 1) + ". Guest Name: " + reservation.getGuestName());
+            System.out.println("   Hotel: " + reservation.getHotelName());
+            System.out.println("   Room: " + reservation.getRoomNumber());
+            System.out.println("   Arrival Date: " + reservation.getArrivalDate());
+            System.out.println("   Departure Date: " + reservation.getDepartureDate());
+            System.out.println("   Total Price: $" + reservation.getTotalPrice());
+        }
+    }
+
+    public void displayCancellationConfirmation() {
+        System.out.println("Reservation successfully canceled.");
     }
 }
